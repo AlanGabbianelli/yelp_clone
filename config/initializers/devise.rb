@@ -8,6 +8,12 @@ Devise.setup do |config|
   # by default. You can change it below and use your own secret key.
   # config.secret_key = '56a549de86b2768a14eeb8b55dd718b675e92b59e33de74be9286ad9e108b74462f1ba410f7954f247ef1b095b457055874ff5774536dcb5f05337922d5cf954'
 
+  # Since July 8th 2015 Facebook changed to api v2.4. You now need to add extra info_fields to get email field:
+  # config.omniauth :facebook, "APP_ID", "APP_SECRET", scope: 'email', info_fields: 'email,name'
+  # If for some reason Devise cannot load your strategy class, you can set it explicitly with the :strategy_class option:
+  # config.omniauth :facebook, "APP_ID", "APP_SECRET", :strategy_class => OmniAuth::Strategies::Facebook
+  config.omniauth :facebook, Rails.application.secrets.facebook_app_id, Rails.application.secrets.facebook_app_secret, scope: 'email', info_fields: 'email,name', :strategy_class => OmniAuth::Strategies::Facebook
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
