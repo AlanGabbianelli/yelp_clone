@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= javascript_include_tag "application" %>
   <title>YelpClone</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-  <body>
+<body>
 
   <!-- <%= notice %> -->
   <% if user_signed_in? %>
-    <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+  <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
   <% else %>
-    <%= link_to 'Sign in', new_user_session_path %>
-    <%= link_to 'Sign up', new_user_registration_path %>
+  <%= link_to 'Sign in', new_user_session_path %>
+  <%= link_to 'Sign up', new_user_registration_path %>
   <% end %>
 
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
 
-  <%= yield %>
+<%= yield %>
 
-  </body>
+</body>
 </html>
