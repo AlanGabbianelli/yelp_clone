@@ -22,7 +22,7 @@ feature 'restaurants' do
   end
 
   context 'creating restaurants' do
-    scenario 'prompts user to fill out a form, then displays the new restaurant' do
+    scenario 'prompts user to fill a form, then displays the new restaurant' do
       visit '/restaurants'
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
@@ -32,12 +32,25 @@ feature 'restaurants' do
     end
 
     context 'an invalid restaurant' do
-      it 'does not let you submit a name that is too short' do
+      scenario 'does not let you submit a name that is too short' do
         visit '/restaurants'
         click_link 'Add a restaurant'
         fill_in 'Name', with: 'kf'
         click_button 'Create Restaurant'
         expect(page).not_to have_css 'h2', text: 'kf'
+        expect(page).to have_content 'error'
+      end
+
+      scenario 'does not let you submit a name that is already present' do
+        visit '/restaurants'
+        click_link 'Add a restaurant'
+        fill_in 'Name', with: 'KFC'
+        click_button 'Create Restaurant'
+        visit '/restaurants'
+        click_link 'Add a restaurant'
+        fill_in 'Name', with: 'KFC'
+        click_button 'Create Restaurant'
+        expect(page).not_to have_css 'h2', text: 'KFC'
         expect(page).to have_content 'error'
       end
     end
@@ -55,7 +68,7 @@ feature 'restaurants' do
   end
 
   context 'editing restaurants' do
-    before {Restaurant.create name: 'KFC'}
+    before { Restaurant.create name: 'KFC' }
 
     scenario 'let a user edit a restaurant' do
       visit '/restaurants'
@@ -67,9 +80,8 @@ feature 'restaurants' do
     end
   end
 
-
   context 'deleting restaurants' do
-    before {Restaurant.create name: 'KFC'}
+    before { Restaurant.create name: 'KFC' }
 
     scenario 'removes a restaurant when a user clicks delete link' do
       visit '/restaurants'
@@ -78,6 +90,4 @@ feature 'restaurants' do
       expect(page).to have_content 'Restaurants deleted successfully'
     end
   end
-
-
 end
