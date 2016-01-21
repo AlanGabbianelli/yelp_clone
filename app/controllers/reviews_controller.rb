@@ -6,11 +6,27 @@ class ReviewsController < ApplicationController
 
   def create
     @restaurant = Restaurant.find(params[:restaurant_id])
-    @restaurant.reviews.create(review_params)
+    @review = @restaurant.reviews.new(review_params)
+    unless @review.save
+      flash[:notice] = 'You cannot review a restaurant more than once'
+    end
     redirect_to restaurants_path
   end
 
+  def destroy
+    @review = Review.find(params[:id])
+    if @review.user_id == current_user.id
+      @review.destroy
+      flash[:notice] = 'Review deleted successfully'
+    else
+      flash[:notice] = 'You cannot delete a review created by someone else'
+    end
+    redirect_to '/restaurants'
+  end
+
   def review_params
-    params.require(:review).permit(:thoughts, :rating)
+    new_params = params.require(:review).permit(:thoughts, :rating)
+    new_params[:user_id] = current_user.id
+    new_params
   end
 end

@@ -10,7 +10,7 @@ feature 'Restaurants' do
 
     context 'creating restaurants' do
       context 'when user is signed up' do
-        before { user_sign_up }
+        before { user_1_sign_up }
 
         scenario 'prompts user to fill a form, then displays new restaurant' do
           visit '/restaurants'
@@ -70,22 +70,40 @@ feature 'Restaurants' do
     end
 
     context 'editing / deleting restaurants' do
-      before { user_sign_up }
-
       scenario 'let a user edit a restaurant' do
-        visit '/restaurants'
-        click_link 'Edit KFC'
-        fill_in 'Name', with: 'Kentucky Fried Chicken'
+        user_1_sign_up
+        add_negril
+        click_link 'Edit Negril'
+        fill_in 'Name', with: 'New Negril'
         click_button 'Update Restaurant'
-        expect(page).to have_content 'Kentucky Fried Chicken'
+        expect(page).to have_content 'New Negril'
         expect(current_path).to eq '/restaurants'
       end
 
-      scenario 'removes a restaurant when a user clicks delete link' do
-        visit '/restaurants'
-        click_link 'Delete KFC'
-        expect(page).not_to have_content 'KFC'
+      scenario 'let a user delete a restaurant' do
+        user_1_sign_up
+        add_negril
+        click_link 'Delete Negril'
+        expect(page).not_to have_content 'Negril'
         expect(page).to have_content 'Restaurants deleted successfully'
+      end
+
+      scenario 'let a user edit only restaurants they created' do
+        user_1_sign_up
+        add_kfc
+        click_link 'Sign out'
+        user_2_sign_up
+        click_link 'Edit KFC'
+        expect(page).to have_content 'You cannot edit a restaurant created by someone else'
+      end
+
+      scenario 'let a user delete only restaurants they created' do
+        user_1_sign_up
+        add_kfc
+        click_link 'Sign out'
+        user_2_sign_up
+        click_link 'Delete KFC'
+        expect(page).to have_content 'You cannot delete a restaurant created by someone else'
       end
     end
   end
