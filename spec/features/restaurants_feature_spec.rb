@@ -13,10 +13,7 @@ feature 'Restaurants' do
         before { user_1_sign_up }
 
         scenario 'prompts user to fill a form, then displays new restaurant' do
-          visit '/restaurants'
-          click_link 'Add a restaurant'
-          fill_in 'Name', with: 'KFC'
-          click_button 'Create Restaurant'
+          add_kfc
           expect(page).to have_content 'KFC'
           expect(current_path).to eq '/restaurants'
         end
