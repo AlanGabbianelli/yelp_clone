@@ -44,6 +44,8 @@ group :development, :test do
   gem 'capybara'
   gem 'shoulda'
   gem 'rspec-collection_matchers'
+  gem 'poltergeist'
+  gem 'database_cleaner'
 end
 
 group :development do
