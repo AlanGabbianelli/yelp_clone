@@ -35,9 +35,7 @@ describe Restaurant, type: :model do
       it 'returns the avarage' do
         restaurant = Restaurant.create(name: 'KFC')
         restaurant.reviews.new(rating: 5).save(validate: false)
-        p restaurant
         restaurant.reviews.new(rating: 1).save(validate: false)
-        p restaurant
         expect(restaurant.average_rating).to eq 3
       end
     end
