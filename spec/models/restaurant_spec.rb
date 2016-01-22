@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Restaurant, type: :model do
   it { is_expected.to have_many(:reviews).dependent(:destroy) }
@@ -13,5 +13,33 @@ describe Restaurant, type: :model do
     Restaurant.create(name: "Moe's Tavern")
     restaurant = Restaurant.new(name: "Moe's Tavern")
     expect(restaurant).to have(1).error_on(:name)
+  end
+
+  describe '#avarage_rating' do
+    context 'no reviews' do
+      it 'returns "N/A" when there are no reviews' do
+        restaurant = Restaurant.create(name: 'KFC')
+        expect(restaurant.average_rating).to eq 'N/A'
+      end
+    end
+
+    context 'one review' do
+      it 'returns the only rating present' do
+        restaurant = Restaurant.create(name: 'KFC')
+        restaurant.reviews.create(rating: 5)
+        expect(restaurant.average_rating).to eq 5
+      end
+    end
+
+    context 'multiple reviews' do
+      it 'returns the avarage' do
+        restaurant = Restaurant.create(name: 'KFC')
+        restaurant.reviews.new(rating: 5).save(validate: false)
+        p restaurant
+        restaurant.reviews.new(rating: 1).save(validate: false)
+        p restaurant
+        expect(restaurant.average_rating).to eq 3
+      end
+    end
   end
 end

@@ -29,4 +29,14 @@ feature 'Reviewing' do
     expect(page).not_to have_content 'Review deleted successfully'
     expect(page).to have_content 'You cannot delete a review created by someone else'
   end
+
+  scenario 'displays an average rating for the reviews' do
+    expect(page).to have_content 'No reviews.'
+    add_good_kfc_review
+    expect(page).to have_content 'Average rating: 5'
+    click_link 'Sign out'
+    user_2_sign_up
+    add_bad_kfc_review
+    expect(page).to have_content 'Average rating: 3'
+  end
 end
