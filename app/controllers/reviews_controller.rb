@@ -21,7 +21,7 @@ class ReviewsController < ApplicationController
     else
       flash[:notice] = 'You cannot delete a review created by someone else'
     end
-    redirect_to '/restaurants'
+    redirect_to restaurants_path
   end
 
   def review_params
