@@ -1,28 +1,30 @@
+<a href="/restaurants/new">Add a restaurant</a>
+
 <% if @restaurants.all.any? %>
 
 <% @restaurants.all.each do |restaurant| %>
 <h2><%= link_to restaurant.name, restaurant_path(restaurant) %></h2>
+<%= image_tag restaurant.image.url(:thumb) %>
+<br>
 <%= link_to "Edit #{restaurant.name}", edit_restaurant_path(restaurant) %>
 <%= link_to "Delete #{restaurant.name}", restaurant_path(restaurant), method: :delete %>
 <%= link_to "Review #{restaurant.name}", new_restaurant_review_path(restaurant)%>
 <h4>Average rating: <%= star_rating(restaurant.average_rating.to_i) %></h4>
-<br>
-<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
-
 <h3>Reviews for <%= restaurant.name %></h3>
 
 <% if restaurant.reviews.any? %>
-<ul>
   <% restaurant.reviews.each do |review| %>
-  <li>
-    <%= review.thoughts %>, <strong><%= review.rating %></strong>/5
+  <div>
+    <%= review.thoughts %> - <strong><%= review.rating %></strong>/5
+    <br>
     <%= link_to "Endorse review", review_endorsements_path(review), class: 'endorsement-link' %>
+    <br>
     <span class="endorsements_count"> <%= review.endorsements.count %> </span> <%= 'endorsement'.pluralize(review.endorsements.count) %>
+    <br>
     <%= link_to "Delete review", review_path(review), method: :delete %>
     <br><br>
-  </li>
+  </div>
   <% end %>
-</ul>
 <% else %>
 <p>No reviews.</p>
 <% end %>
@@ -33,4 +35,3 @@
 <h1>No restaurants yet</h1>
 
 <% end %>
-<a href="/restaurants/new">Add a restaurant</a>
